@@ -1,12 +1,27 @@
 // DllInjector.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#include "windows.h"
 #include <stdio.h>
 #include "../myapi.h"
 
 int main()
 {
-    const auto r = sum(2, 3);
+    auto r = sum(2, 3);
     printf("sum returns %d \n", r);
+
+    const auto hLibrary = LoadLibraryW(L"DllToInject.dll");
+    if (nullptr == hLibrary)
+    {
+        printf("LoadLibraryW returns %lu \n", GetLastError());
+    }
+    const auto pMul = reinterpret_cast<PFN_mul>(GetProcAddress(hLibrary, "_mul@8"));
+    if (nullptr == pMul)
+    {
+        printf("GetProcAddress returns %lu \n", GetLastError());
+    }
+    r = pMul(2, 3);
+    printf("mul returns %d \n", r);
+
     return 0;
 }
 

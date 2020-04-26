@@ -6,3 +6,8 @@ MYAPI_C int MYAPI sum(int a, int b)
 {
     return a + b;
 }
+
+MYAPI_C int MYAPI mul(int a, int b)
+{
+    return a * b;
+}
